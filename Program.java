@@ -1,49 +1,53 @@
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-
 import javax.swing.*;
 
 public class Program extends JFrame {
-//	private Vanster vanster;
-//	private JList<Integer> lista;
-	GameBoard board;
-	
-	public Program() {
-		board = new GameBoard();
-		setLayout(new BorderLayout());
-//		add(vanster);
-//		add(lista);
-		add(board, BorderLayout.CENTER);
-		add(new JLabel("Highscore"), BorderLayout.WEST);
-		add(new JLabel("Latest runs"), BorderLayout.EAST);
-		setResizable(true);
-		pack();
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setVisible(true);
-		board.start();
-	}
+    private HighscoreList highscores = new HighscoreList();
+    private LatestRunsList latestRuns = new LatestRunsList();
+    
+    GameBoard board;
+    
+    public Program() {
+        board = new GameBoard(this);
+        setLayout(new BorderLayout());
+        add(board, BorderLayout.CENTER);
 
-	@Override
-	protected void processKeyEvent(KeyEvent e) {
-		super.processKeyEvent(e);
-		board.processKeyEvent(e);
-	}
+        JList<String> highscoreList = new JList<>(highscores.getModel());
+        highscoreList.setFocusable(false); // Prevent JList from stealing focus
+        JScrollPane highscoreScrollPane = new JScrollPane(highscoreList);
+        highscoreScrollPane.setPreferredSize(new Dimension(150, 0)); // fixed width
+        add(highscoreScrollPane, BorderLayout.WEST);
 
-	public static void main(String[] args) {
-		Program program = new Program();
-//		JFrame obj = new JFrame();
-//		GamePlay gamePlay = new GamePlay();
-//		obj.setBounds(10, 10, 700, 600);
-//		obj.setTitle("Breakout Spel");
-//		obj.setResizable(false);
-//		obj.setVisible(true);
-//		obj.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		obj.add(gamePlay);
-	}
-	
+        JList<String> latestRunsList = new JList<>(latestRuns.getModel());
+        latestRunsList.setFocusable(false); // Prevent JList from stealing focus
+        JScrollPane latestRunsScrollPane = new JScrollPane(latestRunsList);
+        latestRunsScrollPane.setPreferredSize(new Dimension(200, 0)); // fixed width
+        add(latestRunsScrollPane, BorderLayout.EAST);
+        
+        setResizable(true);
+        pack();
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setVisible(true);
+        board.start();
+    }
 
+    @Override
+    protected void processKeyEvent(KeyEvent e) {
+        super.processKeyEvent(e);
+        board.processKeyEvent(e);
+    }
+
+    public static void main(String[] args) {
+        new Program();
+    }
+    
+    public HighscoreList getHighscores() {
+        return highscores;
+    }
+
+    public LatestRunsList getLatestRuns() {
+        return latestRuns;
+    }
 }

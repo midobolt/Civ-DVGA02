@@ -1,40 +1,53 @@
 import java.awt.event.KeyEvent;
-import java.util.HashMap;
+import java.util.EnumMap;
+import java.util.Map;
 
 public class Keyboard {
-	HashMap<Key, Boolean> state;
-	public Keyboard() {
-		state = new HashMap<Key, Boolean>();
-		state.put(Key.Up, false);
-		state.put(Key.Down, false);
-		state.put(Key.Left, false);
-		state.put(Key.Right, false);
-		state.put(Key.Escape, false);
-		state.put(Key.Enter, false);
-		state.put(Key.Space, false);
-	}
-	
-	public boolean isKeyDown(Key key) {
-		if(state.containsKey(key)) {
-			return state.get(key);
-		}
-		return false;
-	}
-	
-	public boolean isKeyUp(Key key) {
-		return !isKeyDown(key);
-	}
-	
-	public void processKeyEvent(int key, boolean st) {
-		switch(key) {
-			case KeyEvent.VK_UP:     state.put(Key.Up,     st); break;
-			case KeyEvent.VK_DOWN:   state.put(Key.Down,   st); break;
-			case KeyEvent.VK_LEFT:   state.put(Key.Left,   st); break;
-			case KeyEvent.VK_RIGHT:  state.put(Key.Right,  st); break;
-			case KeyEvent.VK_ESCAPE: state.put(Key.Escape, st); break;
-			case KeyEvent.VK_ENTER:  state.put(Key.Enter,  st); break;
-			case KeyEvent.VK_SPACE:  state.put(Key.Space,  st); break;
-		}
-	}
-	
+    // Define an enum for keys
+    public enum Key {
+        Up, Down, Left, Right, Escape, Enter, Space
+    }
+
+    // Use EnumMap for better performance and type safety
+    private Map<Key, Boolean> state;
+
+    public Keyboard() {
+        state = new EnumMap<>(Key.class);
+        // Initialize all keys to false (not pressed)
+        for (Key key : Key.values()) {
+            state.put(key, false);
+        }
+    }
+
+    // Check if a key is pressed
+    public boolean isKeyDown(Key key) {
+        return state.getOrDefault(key, false);
+    }
+
+    // Check if a key is not pressed
+    public boolean isKeyUp(Key key) {
+        return !isKeyDown(key);
+    }
+
+    // Update the state of a key based on the key event
+    public void processKeyEvent(int keyCode, boolean isPressed) {
+        Key key = getKeyFromKeyCode(keyCode);
+        if (key != null) {
+            state.put(key, isPressed);
+        }
+    }
+
+    // Map KeyEvent key codes to our Key enum
+    private Key getKeyFromKeyCode(int keyCode) {
+        switch (keyCode) {
+            case KeyEvent.VK_UP:     return Key.Up;
+            case KeyEvent.VK_DOWN:   return Key.Down;
+            case KeyEvent.VK_LEFT:   return Key.Left;
+            case KeyEvent.VK_RIGHT:  return Key.Right;
+            case KeyEvent.VK_ESCAPE: return Key.Escape;
+            case KeyEvent.VK_ENTER:  return Key.Enter;
+            case KeyEvent.VK_SPACE:  return Key.Space;
+            default:                 return null; // Ignore unsupported keys
+        }
+    }
 }

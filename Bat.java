@@ -12,10 +12,10 @@ public class Bat extends Sprite {
 
     @Override
     public void update(Keyboard keyboard) {
-        if (keyboard.isKeyDown(Key.Left) && getX() > 0) {
+        if (keyboard.isKeyDown(Keyboard.Key.Left) && getX() > 0) {
             setX(getX() - speed);
         }
-        if (keyboard.isKeyDown(Key.Right) && getX() < 800 - getWidth()) {
+        if (keyboard.isKeyDown(Keyboard.Key.Right) && getX() < 800 - getWidth()) {
             setX(getX() + speed);
         }
     }
@@ -25,4 +25,9 @@ public class Bat extends Sprite {
         graphics.setColor(Color.BLUE);
         graphics.fillRect(getX(), getY(), getWidth(), getHeight());
     }
+
+	public void reset() {
+		// TODO Auto-generated method stub
+		
+	}
 }
