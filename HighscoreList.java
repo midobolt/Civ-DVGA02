@@ -3,12 +3,12 @@ import javax.swing.table.*;
 
 public class HighscoreList {
     private DefaultListModel<String> model = new DefaultListModel<>();
-    private static final int MAX_ENTRIES = 10;
+    private static final int MAX_ENTRIES = 3;
 
     public DefaultListModel<String> getModel() { return model; }
 
     public void addScore(int score, String initials) {
-        String entry = String.format("%3s %d", initials.toUpperCase(), score);
+    	String entry = initials.toUpperCase() + " " + score;
         
         int insertPos = 0;
         for (; insertPos < model.size(); insertPos++) {
@@ -23,6 +23,7 @@ public class HighscoreList {
     }
 
     private int getScoreFromEntry(String entry) {
-        return Integer.parseInt(entry.split(" ")[1]);
+    	String[] parts = entry.trim().split("\\s+"); // Splits on any space(s), handling inconsistent spacing
+        return Integer.parseInt(parts[parts.length - 1]); // Always get last element (score)
     }
 }
